@@ -19,6 +19,11 @@ public class MainActivity extends AppCompatActivity {
     TextView tvOCBC;
     TextView tvUOB;
     String wordClicked = "";
+    String web_l = "";
+    String con_l = "";
+    String fav_l = "";
+    String un_fav = "";
+    String add_fav = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
         registerForContextMenu(tvDBS);
         registerForContextMenu(tvOCBC);
         registerForContextMenu(tvUOB);
+
+        web_l = getString(R.string.web);
+        con_l = getString(R.string.contact);
+        fav_l = getString(R.string.fav);
+        un_fav = getString(R.string.un_fav);
+        add_fav = getString(R.string.add_fav);
     }
 
     @Override
@@ -46,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
 
-        menu.add(0, 0, 0, "Website");
-        menu.add(0, 1, 1, "Contact the bank");
-        menu.add(0, 2, 2, "Toggle Favourite");
+        menu.add(0, 0, 0, web_l);
+        menu.add(0, 1, 1, con_l);
+        menu.add(0, 2, 2, fav_l);
 
         if (v == tvDBS) {
             wordClicked = "DBS";
@@ -68,11 +79,21 @@ public class MainActivity extends AppCompatActivity {
             tvDBS.setText("DBS");
             tvOCBC.setText("OCBC");
             tvUOB.setText("UOB");
+            web_l = getString(R.string.web);
+            con_l = getString(R.string.contact);
+            fav_l = getString(R.string.fav);
+            un_fav = getString(R.string.un_fav);
+            add_fav = getString(R.string.add_fav);
             return true;
         } else if (id == R.id.ChineseSelection) {
             tvDBS.setText("星展银行");
             tvOCBC.setText("华侨银行");
             tvUOB.setText("大华银行");
+            web_l = "网站";
+            con_l = "联系银行";
+            fav_l = "最喜欢的";
+            un_fav = "已从收藏夹中删除";
+            add_fav = "已添加到收藏夹";
             return true;
         } else {
             tvDBS.setText("");
@@ -88,12 +109,12 @@ public class MainActivity extends AppCompatActivity {
         if (wordClicked.equalsIgnoreCase("DBS")) {
             if (item.getItemId() == 0) { //check whether the selected menu item ID is 0
                 //code for action
-                Intent intent = new Intent(Intent. ACTION_VIEW, Uri.parse(getString(R.string.dbs_web)));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.dbs_web)));
                 startActivity(intent);
                 return true; //menu item successfully handled
             } else if (item.getItemId() == 1) { //check if the selected menu item ID is 1
                 //code for action
-                Intent intentCall = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: "+getString(R.string.dbs_no)));
+                Intent intentCall = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: " + getString(R.string.dbs_no)));
                 startActivity(intentCall);
                 return true;  //menu item successfully handled
             } else if (item.getItemId() == 2) { //check if the selected menu item ID is 2
@@ -104,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
         } else if (wordClicked.equalsIgnoreCase("OCBC")) {
             if (item.getItemId() == 0) { //check if the selected menu item ID is 0
                 //code for action
-                Intent intent = new Intent(Intent. ACTION_VIEW, Uri.parse(getString(R.string.ocbc_web)));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.ocbc_web)));
                 startActivity(intent);
                 return true;  //menu item successfully handled
             } else if (item.getItemId() == 1) { //check if the selected menu item ID is 1
                 //code for action
-                Intent intentCall = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: "+getString(R.string.ocbc_no)));
+                Intent intentCall = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: " + getString(R.string.ocbc_no)));
                 startActivity(intentCall);
                 return true;  //menu item successfully handled
             } else if (item.getItemId() == 2) { //check if the selected menu item ID is 2
@@ -120,12 +141,12 @@ public class MainActivity extends AppCompatActivity {
         } else if (wordClicked.equalsIgnoreCase("UOB")) {
             if (item.getItemId() == 0) { //check if the selected menu item ID is 0
                 //code for action
-                Intent intent = new Intent(Intent. ACTION_VIEW, Uri.parse(getString(R.string.uob_web)));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.uob_web)));
                 startActivity(intent);
                 return true;  //menu item successfully handled
             } else if (item.getItemId() == 1) { //check if the selected menu item ID is 1
                 //code for action
-                Intent intentCall = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: "+getString(R.string.uob_no)));
+                Intent intentCall = new Intent(Intent.ACTION_DIAL, Uri.parse("tel: " + getString(R.string.uob_no)));
                 startActivity(intentCall);
                 return true;  //menu item successfully handled
             } else if (item.getItemId() == 2) { //check if the selected menu item ID is 2
@@ -136,13 +157,24 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void toggleFavourite(TextView tv) {
         if (tv.getCurrentTextColor() == Color.RED) {
             tv.setTextColor(Color.BLACK);
-            Toast.makeText(MainActivity.this, "Removed from favourites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, un_fav, Toast.LENGTH_SHORT).show();
+            if (fav_l == "Unfavourite") {
+                fav_l = getString(R.string.fav);
+            } else if (fav_l == "不喜欢") {
+                fav_l = "最喜欢的";
+            }
         } else {
             tv.setTextColor(Color.RED);
-            Toast.makeText(MainActivity.this, "Added to favourites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, add_fav, Toast.LENGTH_SHORT).show();
+            if (fav_l == getString(R.string.fav)) {
+                fav_l = "Unfavourite";
+            } else if (fav_l == "最喜欢的") {
+                fav_l = "不喜欢";
+            }
         }
     }
 }
